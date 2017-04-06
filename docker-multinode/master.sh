@@ -14,6 +14,47 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+while [[ $# -gt 1 ]]
+do
+  case $1 in
+    --etcd-name)
+      export ETCD_NAME=$2
+      shift
+      ;;
+    --etcd-initial-cluster)
+      export ETCD_INITIAL_CLUSTER=$2
+      shift
+      ;;
+    --etcd-initial-cluster-state)
+      export ETCD_INITIAL_CLUSTER_STATE=$2
+      shift
+      ;;
+    --etcd-initial-advertise-peer-urls)
+      export ETCD_INITIAL_ADVERTISE_PEER_URLS=$2
+      shift
+      ;;
+    --etcd-advertise-client-urls)
+      export ETCD_ADVERTISE_CLIENT_URLS=$2
+      shift
+      ;;
+    --etcd-listen-peer-urls)
+      export ETCD_LISTEN_PEER_URLS=$2
+      shift
+      ;;
+    --etcd-listen-client-urls)
+      export ETCD_LISTEN_CLIENT_URLS=$2
+  esac
+  shift
+done
+
+#export ETCD_NAME="kube_etcd_node1.localdomain"
+#export ETCD_INITIAL_CLUSTER="kube_etcd_node1.localdomain=http://10.10.10.21:2380,kube_etcd_node2.localdomain=http://10.10.10.22:2380"
+#export ETCD_INITIAL_CLUSTER_STATE=new
+#export ETCD_INITIAL_ADVERTISE_PEER_URLS="http://10.10.10.21:2380"
+#export ETCD_ADVERTISE_CLIENT_URLS="http://10.10.10.21:2379"
+#export ETCD_LISTEN_PEER_URLS="http://10.10.10.21:2380"
+#export ETCD_LISTEN_CLIENT_URLS="http://10.10.10.21:2379,http://127.0.0.1:2379"
+
 # Source common.sh
 source $(dirname "${BASH_SOURCE}")/common.sh
 

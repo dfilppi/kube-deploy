@@ -107,6 +107,7 @@ kube::multinode::log_variables() {
   # Output the value of the variables
   kube::log::status "K8S_VERSION is set to: ${K8S_VERSION}"
   kube::log::status "ETCD_VERSION is set to: ${ETCD_VERSION}"
+  kube::log::status "ETCD_INITIAL_CLUSTER is set to: ${ETCD_INITIAL_CLUSTER}"
   kube::log::status "FLANNEL_VERSION is set to: ${FLANNEL_VERSION}"
   kube::log::status "FLANNEL_IPMASQ is set to: ${FLANNEL_IPMASQ}"
   kube::log::status "FLANNEL_NETWORK is set to: ${FLANNEL_NETWORK}"
@@ -125,6 +126,9 @@ kube::multinode::start_etcd() {
 
   kube::log::status "Launching etcd..."
 
+  kube::log::status "CLUSTER=${ETCD_INITIAL_CLUSTER}"
+
+
   # TODO: Remove the 4001 port as it is deprecated
   docker ${BOOTSTRAP_DOCKER_PARAM} run -d \
     --name kube_etcd_$(kube::helpers::small_sha) \
@@ -133,10 +137,16 @@ kube::multinode::start_etcd() {
     -v /var/lib/kubelet/etcd:/var/etcd \
     gcr.io/google_containers/etcd-${ARCH}:${ETCD_VERSION} \
     /usr/local/bin/etcd \
-      --listen-client-urls=http://0.0.0.0:2379,http://0.0.0.0:4001 \
-      --advertise-client-urls=http://localhost:2379,http://localhost:4001 \
-      --listen-peer-urls=http://0.0.0.0:2380 \
-      --data-dir=/var/etcd/data
+      --name=${ETCD_NAME} \
+      --data-dir=/var/etcd/data \
+      --listen-peer-urls ${ETCD_LISTEN_PEER_URLS} \
+      --listen-client-urls ${ETCD_LISTEN_CLIENT_URLS} \
+      --initial-advertise-peer-urls ${ETCD_INITIAL_ADVERTISE_PEER_URLS} \
+      --initial-cluster ${ETCD_INITIAL_CLUSTER} \
+      --initial-cluster-state new \
+      --initial-cluster-token etcd-kub-cluster \
+      --advertise-client-urls ${ETCD_ADVERTISE_CLIENT_URLS} 
+
 
   # Wait for etcd to come up
   local SECONDS=0
