@@ -47,15 +47,8 @@ do
   shift
 done
 
-#export ETCD_NAME="kube_etcd_node1.localdomain"
-#export ETCD_INITIAL_CLUSTER="kube_etcd_node1.localdomain=http://10.10.10.21:2380,kube_etcd_node2.localdomain=http://10.10.10.22:2380"
-#export ETCD_INITIAL_CLUSTER_STATE=new
-#export ETCD_INITIAL_ADVERTISE_PEER_URLS="http://10.10.10.21:2380"
-#export ETCD_ADVERTISE_CLIENT_URLS="http://10.10.10.21:2379"
-#export ETCD_LISTEN_PEER_URLS="http://10.10.10.21:2380"
-#export ETCD_LISTEN_CLIENT_URLS="http://10.10.10.21:2379,http://127.0.0.1:2379"
-
 # Source common.sh
+kube::log::status `env`
 source $(dirname "${BASH_SOURCE}")/common.sh
 
 # Set MASTER_IP to localhost when deploying a master
