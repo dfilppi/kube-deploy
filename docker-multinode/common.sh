@@ -415,20 +415,20 @@ kube::helpers::parse_version() {
 # Print a status line. Formatted to show up in a stream of output.
 kube::log::status() {
   timestamp=$(date +"[%m%d %H:%M:%S]")
-  echo "+++ $timestamp $1"
+  echo "+++ $timestamp $1" >> /tmp/kube.log
   shift
   for message; do
-    echo "    $message"
+    echo "    $message" >> /tmp/kube.log
   done
 }
 
 # Log an error and exit
 kube::log::fatal() {
   timestamp=$(date +"[%m%d %H:%M:%S]")
-  echo "!!! $timestamp ${1-}" >&2
+  echo "!!! $timestamp ${1-}" >> /tmp/kube.log >&2
   shift
   for message; do
-    echo "    $message" >&2
+    echo "    $message" /tmp/kube.log >&2
   done
   exit 1
 }
