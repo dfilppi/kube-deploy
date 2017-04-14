@@ -48,8 +48,9 @@ do
 done
 
 # Source common.sh
-kube::log::status `env`
 source $(dirname "${BASH_SOURCE}")/common.sh
+
+kube::log::status `env`
 
 # Set MASTER_IP to localhost when deploying a master
 MASTER_IP=localhost
