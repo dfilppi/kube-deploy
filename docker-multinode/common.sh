@@ -128,6 +128,28 @@ kube::multinode::start_etcd() {
 
   kube::log::status "CLUSTER=${ETCD_INITIAL_CLUSTER}"
 
+  CARGS=""
+  if [ "$ETCD_NAME" != "" ]; then
+    CARGS="${CARGS} --name $ETCD_NAME"
+  fi
+  if [ "$ETCD_LISTEN_PEER_URLS" != "" ]; then
+    CARGS="${CARGS} --listen-peer-urls $ETCD_LISTEN_PEER_URLS"
+  fi
+  if [ "$ETCD_LISTEN_CLIENT_URLS" != "" ]; then
+    CARGS="${CARGS} --listen-client-urls $ETCD_LISTEN_CLIENT_URLS"
+  fi
+  if [ "$ETCD_INITIAL_ADVERTISE_PEER_URLS" != "" ]; then
+    CARGS="${CARGS} --initial-advertise-peer-urls $ETCD_INITIAL_ADVERTISE_PEER_URLS"
+  fi
+  if [ "$ETCD_INITIAL_CLUSTER" != "" ]; then
+    CARGS="${CARGS} --initial-cluster $ETCD_INITIAL_CLUSTER"
+  fi
+  if [ "$ETCD_INITIAL_CLUSTER" != "" ]; then
+    CARGS="${CARGS} --initial-cluster-state new"
+  fi
+  if [ "$ETCD_ADVERTISE_CLIENT_URLS" != "" ]; then
+    CARGS="${CARGS} --advertise-client-urls $ETCD_ADVERTISE_CLIENT_URLS"
+  fi
 
   # TODO: Remove the 4001 port as it is deprecated
   docker ${BOOTSTRAP_DOCKER_PARAM} run -d \
@@ -137,15 +159,7 @@ kube::multinode::start_etcd() {
     -v /var/lib/kubelet/etcd:/var/etcd \
     gcr.io/google_containers/etcd-${ARCH}:${ETCD_VERSION} \
     /usr/local/bin/etcd \
-      --name=${ETCD_NAME} \
-      --data-dir=/var/etcd/data \
-      --listen-peer-urls ${ETCD_LISTEN_PEER_URLS} \
-      --listen-client-urls ${ETCD_LISTEN_CLIENT_URLS} \
-      --initial-advertise-peer-urls ${ETCD_INITIAL_ADVERTISE_PEER_URLS} \
-      --initial-cluster ${ETCD_INITIAL_CLUSTER} \
-      --initial-cluster-state new \
-      --initial-cluster-token etcd-kub-cluster \
-      --advertise-client-urls ${ETCD_ADVERTISE_CLIENT_URLS} 
+      --data-dir=/var/etcd/data $CARGS
 
 
   # Wait for etcd to come up
