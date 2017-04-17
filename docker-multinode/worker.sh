@@ -20,6 +20,7 @@ do
     --master-ip)
       export MASTER_IP=$2
       shift
+      ;;
     --k8s-version)
       export K8S_VERSION=$2
       shift
