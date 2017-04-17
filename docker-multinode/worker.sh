@@ -14,6 +14,52 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+while [[ $# -gt 1 ]]
+do
+  case $1 in
+    --master-ip)
+      export MASTER_IP=$2
+      shift
+    --k8s-version)
+      export K8S_VERSION=$2
+      shift
+      ;;
+    --etcd-version)
+      export ETCD_VERSION=$2
+      shift
+      ;;
+    --flannel-version)
+      export FLANNEL_VERSION=$2
+      shift
+      ;;
+    --flannel-network)
+      export FLANNEL_NETWORK=$2
+      shift
+      ;;
+    --flannel-ipmasq)
+      export FLANNEL_IPMASQ=$2
+      shift
+      ;;
+    --flannel-backend)
+      export FLANNEL_BACKEND=$2
+      shift
+      ;;
+    --restart-policy)
+      export RESTART_POLICY=$2
+      shift
+      ;;
+    --arch)
+      export ARCH=$2
+      shift
+      ;;
+    --net-interface)
+      export NET_INTERFACE=$2
+      shift
+      ;;
+  esac
+  shift
+done
+
 # Source common.sh
 source $(dirname "${BASH_SOURCE}")/common.sh
 
