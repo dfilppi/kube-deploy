@@ -134,9 +134,13 @@ kube::multinode::start_etcd() {
   fi
   if [ "$ETCD_LISTEN_PEER_URLS" != "" ]; then
     CARGS="${CARGS} --listen-peer-urls $ETCD_LISTEN_PEER_URLS"
+  else
+    CARGS="${CARGS} --listen-peer-urls=//0.0.0.0:2380"
   fi
   if [ "$ETCD_LISTEN_CLIENT_URLS" != "" ]; then
     CARGS="${CARGS} --listen-client-urls $ETCD_LISTEN_CLIENT_URLS"
+  else
+    CARGS="${CARGS} --listen-client-urls=http://0.0.0.0:2379,http://0.0.0.0:4001"
   fi
   if [ "$ETCD_INITIAL_ADVERTISE_PEER_URLS" != "" ]; then
     CARGS="${CARGS} --initial-advertise-peer-urls $ETCD_INITIAL_ADVERTISE_PEER_URLS"
@@ -149,6 +153,8 @@ kube::multinode::start_etcd() {
   fi
   if [ "$ETCD_ADVERTISE_CLIENT_URLS" != "" ]; then
     CARGS="${CARGS} --advertise-client-urls $ETCD_ADVERTISE_CLIENT_URLS"
+  else
+    CARGS="${CARGS} --advertise-client-urls=http://localhost:2379,http://localhost:4001"
   fi
 
   # TODO: Remove the 4001 port as it is deprecated
