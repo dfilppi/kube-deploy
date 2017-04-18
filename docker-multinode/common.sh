@@ -135,7 +135,7 @@ kube::multinode::start_etcd() {
   if [ "$ETCD_LISTEN_PEER_URLS" != "" ]; then
     CARGS="${CARGS} --listen-peer-urls $ETCD_LISTEN_PEER_URLS"
   else
-    CARGS="${CARGS} --listen-peer-urls=//0.0.0.0:2380"
+    CARGS="${CARGS} --listen-peer-urls=http://0.0.0.0:2380"
   fi
   if [ "$ETCD_LISTEN_CLIENT_URLS" != "" ]; then
     CARGS="${CARGS} --listen-client-urls $ETCD_LISTEN_CLIENT_URLS"
